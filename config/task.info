@@ -1,0 +1,250 @@
+; Time Horizon
+mpcTimeHorizon
+{
+  timehorizon      4.0
+  numPartitions    4
+}
+
+; Mode sequence
+subsystemsSequence
+{
+  [0]     0
+}
+; Template mode sequence
+templateSubsystemsSequence
+{
+  [0]     0
+}
+templateSwitchingTimes
+{
+}
+
+; SLQ settings
+slq
+{
+  RiccatiIntegratorType       ODE45      ; ODE45, ADAMS_BASHFORTH, BULIRSCH_STOER, ADAMS_BASHFORTH_MOULTON
+  adams_integrator_dt        0.01
+
+  warmStartGSLQP                 1
+  useLQForDerivatives            0
+  displayGradientDescent         0
+  tolGradientDescent             1e-2
+  acceptableTolGradientDescent   1e-2
+  maxIterationGradientDescent    5
+  minLearningRateNLP             0.05
+  maxLearningRateNLP             0.6
+  useAscendingLineSearchNLP      1
+
+  ddp
+  {
+      maxNumIterations             10      ; 50
+      minLearningRate              1.0     ; 0.1
+      maxLearningRate              1.0
+      minRelCost                   0.1     ; 0.01
+      stateConstraintPenaltyCoeff  100.0
+      stateConstraintPenaltyBase   1.1
+      meritFunctionRho             50.0
+      constraintStepSize           1.0     ; 1.0
+      displayInfo                  0
+      displayShortSummary          0
+      debugPrintRollout            0
+
+      AbsTolODE                      1e-5	;1e-6
+      RelTolODE                      1e-3	;1e-4
+      minTimeStep                    1e-3
+      maxNumStepsPerSecond           50000
+      simulationIsConstrained        0
+      noStateConstraints             1
+      inequalityConstraintMu         1e-2
+      inequalityConstraintDelta      1e-3
+      useMakePSD                     0
+      addedRiccatiDiagonal           1e-5
+      minAbsConstraint1ISE           5e-3
+      minRelConstraint1ISE           5e-6
+      checkNumericalStability        0
+
+      nThreads                    4
+      debugPrintMT                0
+      lsStepsizeGreedy            1
+
+      useRiccatiSolver            1
+  }
+
+  rollout
+  {
+      AbsTolODE                      1e-5	;1e-6
+      RelTolODE                      1e-3	;1e-4
+      minTimeStep                    1e-3
+      maxNumStepsPerSecond           50000
+      checkNumericalStability        0
+  }
+}
+
+; MPC settings
+mpc
+{
+  runtimeMaxNumIterations        4
+  initMaxNumIterations           50
+
+  runtimeMinLearningRate	     1e-4
+  runtimeMaxLearningRate         1.0
+  initMinLearningRate            1e-4
+  initMaxLearningRate            1.0
+
+
+  debugPrint                     0
+  coldStart                      0
+  recedingHorizon                1      ; use receding horizon MPC
+
+  useParallelRiccatiSolver       1      ; use disjoint riccati solver in MP case and recedingHorizon fashion
+
+  useFeedbackPolicy              1
+  forwardSimulationTime          28     ; [ms] MRT time
+
+  rosMsgTimeWindow               200    ; [ms]
+  adaptiveRosMsgTimeWindow       0
+
+  mpcDesiredFrequency            20      ; [Hz]
+  mrtDesiredFrequency            400     ; [Hz]
+}
+
+;interface settings
+model_settings
+{
+  recompileLibraries	   1         ; put this flag to 1 to force recompiling the AD cost and dynamics libraries
+}
+
+; initial configuration
+initialState
+{
+  (0,0)  0.0      ; qx
+  (1,0)  0.0      ; qy
+  (2,0)  0.0      ; qz
+  (3,0)  1.0      ; qw
+  (4,0)  0.1      ; x
+  (5,0)  0.2      ; y
+  (6,0)  0.0      ; z
+  (7,0)  0.0      ; arm_1
+  (8,0)  -1.57079632679     ; arm_2
+  (9,0)  -1.57079632679      ; arm_3
+  (10,0)  0.0     ; arm_4
+  (11,0)  -1.57079632679     ; arm_5
+  (12,0)  0.0     ; arm_6
+}
+
+ee_tracking_task
+{
+  ; state weight matrix
+  Q
+  {
+    scaling 1e+1
+
+    (0,0) 1.0  ; x
+    (1,1) 1.0  ; y
+    (2,2) 1.0  ; z
+    (3,3) 1.0  ; roll
+    (4,4) 1.0  ; pitch
+    (5,5) 1.0  ; yaw
+  }
+
+  ; control weight matrix
+  R
+  {
+    scaling 1e+0
+
+    (0,0) 5.0  ; base_drive
+    (1,1) 5.0  ; base_turn
+    (2,2) 1.0  ; arm_1
+    (3,3) 1.0  ; arm_2
+    (4,4) 1.0  ; arm_3
+    (5,5) 1.0  ; arm_4
+    (6,6) 1.0  ; arm_5
+    (7,7) 1.0  ; arm_6
+  }
+
+  ; final state weight matrix
+  Q_final
+  {
+    scaling 0e+1
+
+    (0,0) 10.0  ; x
+    (1,1) 10.0  ; y
+    (2,2) 10.0  ; z
+    (3,3) 1.0  ; roll
+    (4,4) 1.0  ; pitch
+    (5,5) 1.0  ; yaw
+  }
+}
+
+regularization
+{
+    stateCostRegularization 0
+}
+
+obstacle_cost
+{
+    useObstacleCost     0
+
+    ; penalty function parameters
+    delta               1e-2
+    mu                  0.5e-3
+    sigma               10
+
+    ; base dimensions
+    widthX              1.1
+    widthY              1.0
+
+    ;reach of the arm
+    reach               1.1
+}
+
+stability_soft_constraint
+{
+    activate        1
+    mu              5e-3
+    delta           1e-4
+    support_circle_radius 0.3
+}
+
+voxblox_cost
+{
+    mu              5e-3
+    delta           1e-4
+    max_distance    2.0
+}
+
+; joint limits
+limits
+{
+  enforce_limits     1
+  position_mpc_margin_deg 5
+  lower
+  {
+    (0,0)  -5.23599     ; arm_1
+    (1,0)  -3.14159     ; arm_2
+    (2,0)  -2.47837     ; arm_3
+    (3,0)  -5.23599     ; arm_4
+    (4,0)  -2.04204     ; arm_5
+    (5,0)  -3.14159     ; arm_6
+  }
+  upper
+  {
+    (0,0)  5.23599     ; arm_1
+    (1,0)  0.0         ; arm_2
+    (2,0)  2.47837     ; arm_3
+    (3,0)  5.23599     ; arm_4
+    (4,0)  2.04204     ; arm_5
+    (5,0)  3.14159     ; arm_6
+  }
+  velocity
+  {
+    (0,0)  10.0     ; base_linear [m/s]
+    (1,0)  10.5     ; base_rot [rad/s]
+    (2,0)  1.2     ; arm_1 [rad/s]
+    (3,0)  1.2     ; arm_2 [rad/s]
+    (4,0)  2.4     ; arm_3 [rad/s]
+    (5,0)  2.4     ; arm_4 [rad/s]
+    (6,0)  4.7     ; arm_5 [rad/s]
+    (7,0)  4.7     ; arm_6 [rad/s]
+  }
+}

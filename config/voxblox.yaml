@@ -1,0 +1,4 @@
+tsdf_voxel_size: 0.05
+tsdf_voxels_per_side: 16
+world_frame: odom
+collision_points: [[],[],[],[],[],[[1.0, 0.2], [0.75, 0.2], [0.5, 0.2], [0.25, 0.2], [0.0, 0.2]],[],[]]

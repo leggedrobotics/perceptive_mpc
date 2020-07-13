@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>perceptive_mpc</name>
+  <version>0.0.0</version>
+  <description>The perceptive_mpc package</description>
+  <maintainer email="pankertj@ethz.ch">Johannes Pankert</maintainer>
+  <license>BSD-3-Clause</license>
+  <author email="pankertj@ethz.ch">Johannes Pankert</author>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roslib</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>message_generation</depend>
+  <depend>tf</depend>
+  <depend>ocs2_comm_interfaces</depend>
+  <depend>ocs2_core</depend>
+  <depend>ocs2_robotic_tools</depend>
+  <depend>ocs2_ddp</depend>
+  <depend>kindr</depend>
+  <depend>kindr_ros</depend>
+  <depend>voxblox</depend>
+  <depend>voxblox_ros</depend>
+  <exec_depend>message_runtime</exec_depend>
+  <export>
+  </export>
+</package>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+   <!-- run rviz-->
+    <arg name="rviz"                default="true" />
+    <!--     Name of the task file which defines the mpc problem settings-->
+    <arg name="mpc_task_file"       default="task.info"/>
+    <!-- Set path of robot description -->
+    <arg name="description_file"    default="$(find perceptive_mpc)/urdf/mabi/mabi_mobile.urdf"/>
+    <!-- Set rviz configuration -->
+    <arg name="rvizconfig"          default="$(find perceptive_mpc)/config/demo.rviz"/>
+
+    <!-- Load robot description -->
+    <param name="robot_description" textfile="$(arg description_file)"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+        <param name="publish_frequency" value="100"/>
+    </node>
+
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rvizconfig)" output="screen" if="$(arg rviz)"/>
+
+    <node name="voxblox_node" pkg="voxblox_ros" type="esdf_server" output="log" args="" clear_params="true">
+        <remap from="pointcloud" to="/self_filtered_pointcloud"/>
+        <remap from="voxblox_node/esdf_map_out" to="esdf_map" />
+        <param name="publish_esdf_map" value="true" />
+        <param name="publish_pointclouds" value="true" />
+        <param name="use_tf_transforms" value="true" />
+        <param name="update_mesh_every_n_sec" value="1.0" />
+        <param name="clear_sphere_for_planning" value="false" />
+        <rosparam file="$(find perceptive_mpc)/config/voxblox.yaml"/>
+    </node>
+
+
+    <node pkg="perceptive_mpc" name="kinematic_simulation" type="perceptive_mpc_kinematic_simulation" output="screen"> <!-- launch-prefix="gdb -ex run &#45;&#45;args"-->
+      <param name="mpc_task_file"           value="$(arg mpc_task_file)"/>
+      <rosparam file="$(find perceptive_mpc)/config/kinematic_simulation_parameters.yaml"/>
+      <rosparam file="$(find perceptive_mpc)/config/voxblox.yaml"/>
+      <remap from="/kinematic_simulation/esdf_map_in" to="esdf_map" />
+    </node>
+
+    <node name="interactive_pose_node" pkg="perceptive_mpc" type="interactive_marker.py" output="screen"/>
+</launch>
