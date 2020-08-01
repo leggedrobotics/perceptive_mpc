@@ -3,8 +3,7 @@
 This repository contains the source code for our work on perceptive model predictive control.
 Please find the full text of the paper [here](https://www.research-collection.ethz.ch/handle/20.500.11850/426821):
 
-J. Pankert and M. Hutter, “Perceptive Model Predictive Control for Continuous Mobile Manipulation,” accepted for RA-L and IROS 2020, p. 7, 2020.
-
+J. Pankert and M. Hutter, "Perceptive Model Predictive Control for Continuous Mobile Manipulation," in IEEE Robotics and Automation Letters, doi: 10.1109/LRA.2020.3010721.
 
 Videos of our hardware experiments can be seen [here](https://youtu.be/cTXytsWyFxE).
 
