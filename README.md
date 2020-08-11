@@ -1,9 +1,24 @@
 # Perceptive Model Predictive Control for Continuous Mobile Manipulation
 
 This repository contains the source code for our work on perceptive model predictive control.
-Please find the full text of the paper [here](https://www.research-collection.ethz.ch/handle/20.500.11850/426821):
+Please find the full text of the paper [here](https://www.research-collection.ethz.ch/handle/20.500.11850/426821).
 
-J. Pankert and M. Hutter, "Perceptive Model Predictive Control for Continuous Mobile Manipulation," in IEEE Robotics and Automation Letters, doi: 10.1109/LRA.2020.3010721.
+J. Pankert and M. Hutter, “Perceptive Model Predictive Control for Continuous Mobile Manipulation,” *IEEE Robotics and Automation Letters*, vol. 5, no. 4, pp. 6177–6184, Oct. 2020.
+
+```
+@article{pankertPerceptiveModelPredictive2020a,
+  title = {Perceptive {{Model Predictive Control}} for {{Continuous Mobile Manipulation}}},
+  author = {Pankert, Johannes and Hutter, Marco},
+  year = {2020},
+  month = oct,
+  volume = {5},
+  pages = {6177--6184},
+  issn = {2377-3766},
+  doi = {10.1109/LRA.2020.3010721},
+  journal = {IEEE Robotics and Automation Letters},
+  number = {4}
+}
+```
 
 Videos of our hardware experiments can be seen [here](https://youtu.be/cTXytsWyFxE).
 
