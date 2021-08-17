@@ -31,5 +31,5 @@
     version: feature/cache_gradient_hessian
 - git:
     local-name: ocs2
-    uri: git@bitbucket.org:leggedrobotics/ocs2.git
+    uri: git@github.com:leggedrobotics/ocs2.git
     version: 8.0
