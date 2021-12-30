@@ -45,6 +45,10 @@ Alternatively, you can also create a docker image by running:
 ```
 docker image build -t perceptive_mpc:v0.3 .
 ```
+or pull the image from dockerhub:
+```
+docker pull rslethz/perceptive_mpc
+```
 
 ## Demos
 
